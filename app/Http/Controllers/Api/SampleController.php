@@ -50,7 +50,7 @@ class SampleController extends BaseController
                 $notification=new Notification();
                 $notification->title='Batch '. $sample->id;
                 $notification->content = 'New Sample';
-                $notification->lab_id=1;
+                $notification->lab_id= $request->lab_id;
                 $notification->save();
 
                 return $this->sendResponse($sample, 'Successfully Sent Lab Samples In '. $lab->lab_name);
@@ -74,12 +74,11 @@ class SampleController extends BaseController
         $user=User::find($id);
         if($user)
         {
-            echo $user->parent_lab;
-
+            $notification=Notification::where('lab_id', $user->lab_id)->get();
+            return $this->sendResponse($notification, 'User Notification Get Successfully');
 
         }else{
             return $this->sendError('User Not Exists', []);
-
         }
         
     }
