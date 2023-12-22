@@ -67,6 +67,12 @@ Route::middleware(['auth:sanctum'])->group( function () {
 
         Route::prefix('sample')->group(function () {
            Route::post('/send', [SampleController::class, 'send_sample']);
+           Route::get('/lab/{id}', [SampleController::class, 'sample_by_lab']);
+           Route::get('/user/{id}', [SampleController::class, 'sample_by_user']);
+
+        });
+        Route::prefix('report')->group(function () {
+           Route::post('/lab', [SampleController::class, 'report_Send']);
         });
 
             Route::get('/notification/user/{id}', [SampleController::class, 'user_notification']);

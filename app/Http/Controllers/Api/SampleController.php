@@ -41,7 +41,7 @@ class SampleController extends BaseController
                 $sample->wax_grade_no = $request->wax_grade_no;
                 $sample->date = $request->date;
                 $sample->assign_for=1;
-                $sample->lab_id = $request->lab_id;                
+                $sample->lab_id = $request->lab_id;
                 $sample->approved = 0;
                 $sample->is_edit = 0;
                 $sample->status = 0;
@@ -50,6 +50,7 @@ class SampleController extends BaseController
                 $notification=new Notification();
                 $notification->title='Batch '. $sample->id;
                 $notification->content = 'New Sample';
+                $notification->sample_id = $sample->id;
                 $notification->lab_id= $request->lab_id;
                 $notification->save();
 
@@ -60,7 +61,7 @@ class SampleController extends BaseController
 
             }else{
                 return $this->sendError('Report Only Send to Lab 1', []);
-            }       
+            }
 
         }else{
             return $this->sendError('Lab Not Exists', []);
@@ -80,6 +81,24 @@ class SampleController extends BaseController
         }else{
             return $this->sendError('User Not Exists', []);
         }
-        
+    }
+
+    public function sample_by_lab($id)
+    {
+       $labs_sample= Sample::where('lab_id',$id)->get();
+       return $this->sendResponse($labs_sample, 'Labs Samples Get Successfully');
+    }
+
+    public function sample_by_user($id)
+    {
+       $user= User::where('id',$id)->first();
+       if($user)
+       {
+         $samples=Sample::where('lab_id', $user->lab_id)->get();
+         return $this->sendResponse($samples, 'Labs Samples of user Get Successfully');
+        }else{
+                return $this->sendError('User Not Exists', []);
+        }
+
     }
 }

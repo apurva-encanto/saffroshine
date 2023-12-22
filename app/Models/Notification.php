@@ -12,6 +12,7 @@ class Notification extends Model
     protected $fillable = [
         'title',
         'lab_id',
+        'sample_id',
         'is_read'
     ];
 }
